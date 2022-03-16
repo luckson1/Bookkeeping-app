@@ -1,0 +1,25 @@
+{
+  "name": "bookkeeping-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run start --prefix client",
+    "watch": "npm run server & npm run client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luckson1/Bookkeeping-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luckson1/Bookkeeping-app/issues"
+  },
+  "homepage": "https://github.com/luckson1/Bookkeeping-app#readme",
+  "dependencies": {
+    "express-async-handler": "^1.2.0"
+  }
+}
