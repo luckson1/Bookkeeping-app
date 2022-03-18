@@ -20,16 +20,18 @@ const userSchema = new mongoose.Schema({
     },
     isAdmin: {
         type: Boolean,
-        required: true
-    },
-    firstname: {
-        type: String,
-        required: true
+        default: false,
     },
 
 }, {
     timestamp: true,
 })
+
+// verifiy password
+userSchema.methods.isPasswordMatch = async (enteredPassword) => {
+    return await bcrypt.compare(enteredPassword, this.password)
+};
+
 
 //Hash password
 userSchema.pre('save', async () => {
