@@ -5,7 +5,7 @@ const Expenses = require('../../models/Expenses');
 const fetchExpensesCtrl = expressAsyncHandler(async (req, res) => {
     const {page}=req.query
     try {
-        const expenses = await Expenses.paginate({}, {limit: 10, page: Number(page)})
+        const expenses = await Expenses.paginate({}, {limit: 10, page: Number(page), populate: 'user'})
         res.json(expenses)
     } catch (error) {
         res.json(error)
