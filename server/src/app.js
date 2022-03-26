@@ -2,6 +2,7 @@ const express= require('express');
 const dbConnect=require ('./config/dbConnect')
 const {errorHandler, notFound} =require ('./middleware/errorMiddleware')
 const dotenv=require ('dotenv')
+const cors= require ('cors');
 
 
 const userRoutes = require('./routes/users/users');
@@ -16,12 +17,17 @@ const app=express()
 // env
 dotenv.config()
 // dbConnect
-dbConnect()
+dbConnect();
 
 // middlewear
 app.use(express.json());
-// app.use(notFound);
-app.use(errorHandler);
+app.use(cors())
+app.use(cors());
+
+app.get("/", (req, res) => {
+  res.json({ msg: "Welcome Expenses tracker API" });
+});
+
 
 
 //Users routes
@@ -32,5 +38,10 @@ app.use("/api/sales", salesRoutes)
 
 // Expenses routes
 app.use("/api/sales", ExpensesRoutes)
+
+//errors
+
+app.use(notFound);
+app.use(errorHandler);
 
 module.exports=app
