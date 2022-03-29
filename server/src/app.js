@@ -21,7 +21,6 @@ dbConnect();
 
 // middlewear
 app.use(express.json());
-app.use(cors())
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -31,13 +30,13 @@ app.get("/", (req, res) => {
 
 
 //Users routes
-app.use("/api/users", userRoutes)
+app.use("/api/users", userRoutes);
 
 // Sales routes
-app.use("/api/sales", salesRoutes)
+app.use("/api/sales", salesRoutes);
 
 // Expenses routes
-app.use("/api/sales", ExpensesRoutes)
+app.use("/api/sales", ExpensesRoutes);
 
 //errors
 

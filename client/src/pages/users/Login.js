@@ -1,8 +1,10 @@
 import React from "react";
+import { useDispatch , useSelector } from "react-redux";
 import { useFormik } from "formik";
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 import { loginUserAction } from "../../redux/slices/users/userSlices";
-import { useDispatch} from "react-redux";
+import DisabledButton from "../../components/disableButton";
+
 // validation
 const formSchema = Yup.object({
     email: Yup.string().required("Email is required"),
@@ -12,7 +14,17 @@ const formSchema = Yup.object({
 const Login = () => {
 
     // dispatch
-    const dispatch= useDispatch()
+    const dispatch = useDispatch()
+
+
+    // get data from store
+
+    const user = useSelector((state) => {
+        return state?.users
+    })
+    console.log(user)
+    const { userAppErr, userServerErr, userLoading}=user;
+    //form formik
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -47,11 +59,11 @@ const Login = () => {
                             <h3 className="fw-bold mb-5">Login to your account</h3>
                             {/* Display Err */}
 
-                            {/* {userAppErr || userServerErr ? (
+                            {userAppErr || userServerErr ? (
                 <div class="alert alert-danger" role="alert">
                   {userServerErr} {userAppErr}
                 </div>
-              ) : null} */}
+              ) : null}
                             <form onSubmit={formik.handleSubmit}>
                                 <input
                                     value={formik.values.email}
@@ -75,16 +87,16 @@ const Login = () => {
                                 />
                                 {/* Err */}
                                 <div className="text-danger mb-2">
-                  {formik.touched.password && formik.errors.password}
-                </div>
+                                    {formik.touched.password && formik.errors.password}
+                                </div>
 
                                 <div>
-                                    <button
+                                    {userLoading?(<DisabledButton />): (<button
                                         type="submit"
                                         className="btn btn-primary py-2 w-100 mb-4"
                                     >
                                         Login
-                                    </button>
+                                    </button>)}
                                 </div>
                             </form>
                         </div>
