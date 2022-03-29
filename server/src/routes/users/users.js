@@ -1,13 +1,14 @@
 const express=require ('express')
-const { registerUser, fetchAllCtrl} =require('../../controllers/users/user')
+const { registerUser, fetchAllCtrl, loginUserCtrl} =require('../../controllers/users/user')
 
 
-const userRoute=express.Router();
+const userRoutes=express.Router();
 
-userRoute.post('/register', (res, req) => {registerUser});
-userRoute.get('/', (res, req) => {fetchAllCtrl});
+userRoutes.post('/register', registerUser);
+userRoutes.get('/', fetchAllCtrl);
+userRoutes.post("/login", loginUserCtrl);
 
 
 
-module.exports=userRoute;
+module.exports=userRoutes;
 
