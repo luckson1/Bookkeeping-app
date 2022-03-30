@@ -17,6 +17,9 @@ export const loginUserAction = createAsyncThunk('user/login', async (payload, { 
             `${baseURL}/users/login`,
             payload,
             config);
+
+        //save user into localstorage
+        localStorage.setItem('userInfo', JSON.stringify(data))
         return data;
 
     } catch (error) {
@@ -57,11 +60,30 @@ export const registerUserAction = createAsyncThunk('user/register', async (paylo
 
 });
 
+//Logout action
+export const logout = createAsyncThunk(
+    "user/logout",
+    async (payload, { rejectWithValue, getState, dispatch }) => {
+        try {
+            //Save user into localstorage
+            localStorage.removeItem("userInfo");
+        } catch (error) {
+            if (!error?.response) {
+                throw error;
+            }
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+);
 // login slices
 
+//Get user from storage
+const userLoginFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : undefined;
 const usersSlices = createSlice({
     name: 'user',
-    initialState: {},
+    initialState: {
+        userAuth: userLoginFromStorage
+    },
     extraReducers: (builder) => {
         // login
         // handle pending state
@@ -109,7 +131,13 @@ const usersSlices = createSlice({
             state.userAppErr = action?.payload?.msg;
             state.userServerErr = action?.error?.msg;
         });
-        
+
+        // Logout
+        builder.addCase(logout.fulfilled, (state, action) => {
+            state.userAuth = undefined;
+            state.userLoading = false;
+        });
+
 
     }
 });

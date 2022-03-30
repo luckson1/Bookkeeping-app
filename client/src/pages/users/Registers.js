@@ -1,10 +1,10 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { registerUserAction } from "../../redux/slices/users/userSlices";
-
-
+import { useNavigate } from "react-router-dom";
+import DisabledButton from "../../components/disableButton";
 
 
 
@@ -17,9 +17,20 @@ const formSchema = Yup.object({
 });
 
 const Register = () => {
-// dispatch 
 
-const dispatch = useDispatch()
+  //history
+  const navigate = useNavigate();
+  // dispatch 
+
+  const dispatch = useDispatch()
+
+
+  // get data from store
+
+  const user = useSelector((state) => {
+    return state?.users
+  })
+  const { userAppErr, userServerErr, userLoading, userAuth } = user;
   //form formik
   const formik = useFormik({
     initialValues: {
@@ -29,12 +40,17 @@ const dispatch = useDispatch()
       password: "",
     },
     onSubmit: values => {
-      dispatch (registerUserAction(values))
+      dispatch(registerUserAction(values))
     },
 
     validationSchema: formSchema,
   });
-
+  // redirection
+  useEffect(() => {
+    if (userAuth) {
+      return navigate('/')
+    }
+  }, [userAuth])
 
   return (
     <section className="position-relative py-5 overflow-hidden vh-100">
@@ -56,11 +72,11 @@ const dispatch = useDispatch()
                 <h3 className="fw-bold mb-5">Register</h3>
 
                 {/* Display err here */}
-                {/* {userAppErr || userServerErr ? (
+                {userAppErr || userServerErr ? (
                   <div class="alert alert-danger" role="alert">
                     {userServerErr} {userAppErr}
                   </div>
-                ) : null} */}
+                ) : null}
                 <input
                   value={formik.values.firstname}
                   onChange={formik.handleChange("firstname")}
@@ -110,12 +126,12 @@ const dispatch = useDispatch()
                   {formik.touched.password && formik.errors.password}
                 </div>
 
-                <button
+                {userLoading ? (<DisabledButton />) : (<button
                   type="submit"
                   className="btn btn-primary py-2 w-100 mb-4"
                 >
                   Register
-                </button>
+                </button>)}
               </form>
             </div>
           </div>
