@@ -9,6 +9,9 @@ import AddExpense from './pages/expense/addExpense';
 import Profile from './pages/users/Profile';
 import Navbar from './components/Navigation/Navbar';
 import ProtectedRoute from './components/Navigation/ProtectedRoutes';
+import NotAdmin from './components/NotAdmin';
+import AdminRoute from './components/Navigation/AdminRoute';
+import ExpensesList from './pages/expense/ExpenseList';
 
 
 function App() {
@@ -21,30 +24,47 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
+          <Route exact path="/not-found" element={<NotAdmin />} />
           <Route
-          path="/add-sale"
-          element={
-            <ProtectedRoute>
-              <AddSales />
-            </ProtectedRoute>
-          }
-        />
+            path="/dashboard"
+            element={
+              <AdminRoute>
+                <Profile />
+              </AdminRoute>
+            }
+          />
           <Route
-          path="/add-expense"
-          element={
-            <ProtectedRoute>
-              <AddExpense />
-            </ProtectedRoute>
-          }
-        />
+            path="/add-sale"
+            element={
+              <ProtectedRoute>
+                <AddSales />
+              </ProtectedRoute>
+            }
+          />
           <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
+            path="/expenses"
+            element={
+              <ProtectedRoute>
+                <ExpensesList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-expense"
+            element={
+              <ProtectedRoute>
+                <AddExpense />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
 
       </BrowserRouter>

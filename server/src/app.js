@@ -36,7 +36,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/sales", salesRoutes);
 
 // Expenses routes
-app.use("/api/sales", ExpensesRoutes);
+app.use("/api/expenses", ExpensesRoutes);
 
 //errors
 

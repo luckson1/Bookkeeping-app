@@ -14,21 +14,23 @@ const fetchExpensesCtrl = expressAsyncHandler(async (req, res) => {
 
 //create expenses
 
-const createExpensesCtrl = expressAsyncHandler(async (req, res) => {
-    const { title, amount, description, user } = res.body;
+const createExpensesCtrl =  expressAsyncHandler(async (req, res) => {
+    
+    const { title, amount, description } = req.body;
     try {
-        const expense = await Expenses.create({
-
-            title,
-            amount,
-            description,
-            user
-        });
-        res.json(expense)
+      const expense = await Expenses.create({
+        title,
+        amount,
+        description,
+        user: req?.user?._id
+        
+      });
+      res.json(expense);
+      
     } catch (error) {
-        res.json(error)
+      res.json(error);
     }
-});
+  });
 
 //fetch single expenses
 

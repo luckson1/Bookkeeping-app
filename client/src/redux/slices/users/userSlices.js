@@ -90,7 +90,7 @@ const usersSlices = createSlice({
         builder.addCase(loginUserAction.pending, (state, action) => {
             state.userLoading = true;
             state.userAppErr = undefined;
-            state.userLoading = undefined;
+            state.userServerErr = undefined;
         });
 
         //hande success state
@@ -113,7 +113,7 @@ const usersSlices = createSlice({
         builder.addCase(registerUserAction.pending, (state, action) => {
             state.userLoading = true;
             state.userAppErr = undefined;
-            state.userLoading = undefined;
+            state.userServerErr = undefined;
         });
 
         //hande success state
