@@ -8,7 +8,7 @@ export const createExpenseAction = createAsyncThunk(
     async (payload, { rejectWithValue, getState, dispatch }) => {
       //get user token from store
       const userToken = getState()?.users?.userAuth?.token;
-      console.log(userToken)
+      
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const createExpenseAction = createAsyncThunk(
         //make http call here
 
         const { data } = await axios.post(`${baseURL}/expenses`, payload, config);
-        console.log(data)
+        
         return data;
     } catch (error) {
         if (!error?.response) {
@@ -53,7 +53,38 @@ export const FetchExpensesAction = createAsyncThunk('expense/fetch', async (payl
         //make http call here
 
         const { data } = await axios.get(`${baseURL}/expenses?pages=${payload}`,  config);
-        console.log(data)
+        
+        return data;
+    } catch (error) {
+        if (!error?.response) {
+            throw error;
+        }
+        return rejectWithValue(error?.response?.data);
+    }
+
+
+
+});
+
+// update expenses
+export const UpdateExpenseAction = createAsyncThunk('expense/update', async (payload, { rejectWithValue, getState, dispatch }) => {
+    //get user token from store
+
+    const userToken = getState()?.users?.userAuth?.token;
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+        },
+
+    };
+
+
+    try {
+        //make http call here
+
+        const { data } = await axios.put(`${baseURL}/expenses/${payload?.id}`, payload, config);
+        
         return data;
     } catch (error) {
         if (!error?.response) {
@@ -110,6 +141,28 @@ const expensesSlices = createSlice({
         //hande rejected state
 
         builder.addCase(FetchExpensesAction.rejected, (state, action) => {
+            state.expenseLoading = false;
+            state.expenseAppErr = action?.payload?.msg;
+            state.expenseServerErr = action?.error?.msg;
+        });
+
+           //update Expense
+        // handle pending state
+        builder.addCase(UpdateExpenseAction.pending, (state, action) => {
+            state.expenseLoading = true;
+
+        });
+
+        //hande success state
+        builder.addCase(UpdateExpenseAction.fulfilled, (state, action) => {
+            state.UpdatedExpense = action?.payload;
+            state.expenseLoading = false;
+            state.expenseAppErr = undefined;
+            state.expenseServerErr = undefined;
+        });
+        //hande rejected state
+
+        builder.addCase(UpdateExpenseAction.rejected, (state, action) => {
             state.expenseLoading = false;
             state.expenseAppErr = action?.payload?.msg;
             state.expenseServerErr = action?.error?.msg;

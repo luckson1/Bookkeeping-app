@@ -33,7 +33,7 @@ const AddExpense = () => {
         },
         onSubmit: values => {
             dispatch(createExpenseAction(values))
-            console.log(dispatch(createExpenseAction(values)))
+            
             
         },
 

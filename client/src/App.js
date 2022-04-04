@@ -12,6 +12,7 @@ import ProtectedRoute from './components/Navigation/ProtectedRoutes';
 import NotAdmin from './components/NotAdmin';
 import AdminRoute from './components/Navigation/AdminRoute';
 import ExpensesList from './pages/expense/ExpenseList';
+import EditExpense from './pages/expense/EditExpense';
 
 
 function App() {
@@ -38,6 +39,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AddSales />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit-expense"
+            element={
+              <ProtectedRoute>
+                <EditExpense />
               </ProtectedRoute>
             }
           />
