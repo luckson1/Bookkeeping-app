@@ -7,7 +7,7 @@ const store=configureStore( {
     reducer: {
         users: usersReducer,
         expenses: expensesReducer,
-        sales: salesReducer
+        sales: salesReducer,
     }
 });
 

@@ -5,7 +5,7 @@ import dateFormatter from "../utils/dateFormatter";
 
 
 
-const ContentDetails = ({ item }) => {
+const ContentDetails = ({ item, path }) => {
   
   const navigate = useNavigate();
   return (
@@ -26,7 +26,7 @@ const ContentDetails = ({ item }) => {
             // onClick={() => navigate(history, "edit", item)}
             onClick={() =>
               
-              navigate("/edit-expense", { state: {expense: item} })
+              navigate({pathname: path}, { state: {sale: item} })
             }
             className="badge bg-success-light text-success"
           >

@@ -67,7 +67,7 @@ const AddExpense = () => {
                                 <form onSubmit={formik.handleSubmit}>
                                     <span className="text-muted">Expense</span>
                                     <h2 className="mb-4 fw-light">Record New Expense</h2>
-                                    {/* Display income Err */}
+                                    {/* Display expense Err */}
                                     {expenseServerErr || expenseAppErr ? (
                                         <div className="alert alert-danger" role="alert">
                                             {expenseServerErr} {expenseAppErr}

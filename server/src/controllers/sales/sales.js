@@ -53,7 +53,7 @@ const updateSalesctrl = expressAsyncHandler(async (req, res) => {
     const { id } = req.params
     const { title, description, amount, } = req.body
     try {
-        const sale = await Sales.findOneAndUpdate(id, { title, description, amount }, { new: true })
+        const sale = await Sales.findByIdAndUpdate(id, { title, description, amount }, { new: true })
         res.json(sale)
     } catch (error) {
 

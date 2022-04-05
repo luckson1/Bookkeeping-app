@@ -6,24 +6,24 @@ import { AppPagination } from "../../components/AppPagination";
 import ContentDetails from "../../components/ContentDetails";
 import ErrorDisplayMessage from "../../components/ErrorDisplayMessage";
 import LoadingComponent from "../../components/Loading";
-import { FetchExpensesAction } from "../../redux/slices/expenses/ExpenseSlices";
+import { FetchSalesAction } from "../../redux/slices/sales/SaleSlices";
 
-const ExpensesList = () => {
+const SalesList = () => {
 
     //dispatch
     const dispatch = useDispatch()
 
     const [page, setPage] = useState(1)
     useEffect(() => {
-        dispatch(FetchExpensesAction(+page))
+        dispatch(FetchSalesAction(+page))
     }, [dispatch, page, setPage]);
-    //get all expenses
-    const allExpenses = useSelector(state => state?.expenses);
-    const { expenseLoading, expenseServerErr, expenseAppErr, expenseList } = allExpenses
-    console.log(expenseList?.total)
+    //get all sales 
+    const allSales = useSelector(state => state?.sales);
+    const { saleLoading, saleAppErr, saleServerErr, saleList } = allSales
+    console.log(saleList?.total)
     return (
         <>
-            {expenseLoading ? <LoadingComponent /> : expenseAppErr || expenseServerErr ?
+            {saleLoading ? <LoadingComponent /> : saleServerErr || saleAppErr ?
                 < ErrorDisplayMessage>
                     Err
                 </ErrorDisplayMessage> :
@@ -32,12 +32,12 @@ const ExpensesList = () => {
                         <div className="position-relative border rounded-2">
                             <a className="position-absolute top-0 end-0 mt-4 me-4" href="/">.</a>
                             <div className="pt-8 px-8 mb-8">
-                                <h6 className="mb-0 fs-3">Recent Expense transactions</h6>
+                                <h6 className="mb-0 fs-3">Recent Sale transactions</h6>
                                 <p className="mb-0">
-                                    Below is the history of your expense transactions records
+                                    Below is the history of your Sale transactions records
                                 </p>
-                                <Link to="/add-expense" className="btn  btn-outline-danger me-2 m-2">
-                                    New Expense
+                                <Link to="/add-sale" className="btn  btn-outline-danger me-2 m-2">
+                                    New Sale
                                 </Link>
                             </div>
                             <table className="table">
@@ -76,14 +76,14 @@ const ExpensesList = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {expenseLoading ? (
+                                    {saleLoading ? (
                                         <h1>Loading</h1>
-                                    ) : expenseAppErr || expenseServerErr ? (
+                                    ) : saleServerErr || saleAppErr ? (
                                         <div>Err</div>
-                                    ) : expenseList?.docs?.length <= 0 ? (
-                                        <h1>No Expenses Found</h1>
-                                    ) : (expenseList?.docs?.map(exp => {
-                                        return <ContentDetails item={exp} key={exp?._id} path={"/edit-expense"}/>
+                                    ) : saleList?.docs?.length <= 0 ? (
+                                        <h1>No sales Found</h1>
+                                    ) : (saleList?.docs?.map(sale => {
+                                        return <ContentDetails item={sale} key={sale?._id} path={"/edit-sale"}/>
                                     }))}
                                 </tbody>
                             </table>
@@ -99,7 +99,7 @@ const ExpensesList = () => {
                     >
                         {/* Call App Pagination here */}
                         <div>
-                            <AppPagination pageNumber={expenseList?.total} setPage={setPage} />
+                            <AppPagination pageNumber={saleList?.total} setPage={setPage} />
 
                         </div>
                     </div>
@@ -108,4 +108,4 @@ const ExpensesList = () => {
     );
 };
 
-export default ExpensesList;
+export default SalesList;

@@ -33,7 +33,7 @@ const PrivateNavbar = () => {
               </li>
 
               <li class="nav-item">
-                <Link to="/incomes" className="nav-link active">
+                <Link to="/sales" className="nav-link active">
                   Sales List
                 </Link>
               </li>

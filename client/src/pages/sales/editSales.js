@@ -3,9 +3,9 @@ import moneySVG from "../../img/money.svg";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { useLocation } from "react-router-dom";
-import { UpdateExpenseAction } from "../../redux/slices/expenses/ExpenseSlices";
 import { useDispatch, useSelector } from "react-redux";
 import DisabledButton from "../../components/disableButton";
+import { UpdateSaleAction } from "../../redux/slices/sales/SaleSlices";
 
 
 
@@ -16,7 +16,7 @@ const formSchema = Yup.object({
 });
 
 
-const EditExpense = () => {
+const EditSale = () => {
     const location = useLocation()
         const dispatch = useDispatch()
 
@@ -24,13 +24,13 @@ const EditExpense = () => {
     //form formik
     const formik = useFormik({
         initialValues: {
-            title: location?.state?.expense?.title,
-            description: location?.state?.expense?.description,
-            amount: location?.state?.expense?.amount
+            title: location?.state?.sale?.title,
+            description: location?.state?.sale?.description,
+            amount: location?.state?.sale?.amount
         },
         onSubmit: values => {
-            const data= {...values, id: location?.state?.expense?._id}
-            dispatch(UpdateExpenseAction(data))
+            const data= {...values, id: location?.state?.sale?._id}
+            dispatch(UpdateSaleAction(data))
 
 
         },
@@ -38,12 +38,12 @@ const EditExpense = () => {
         validationSchema: formSchema,
     });
 
-    const expense = useSelector ((state) => {
-        return state?.expenses
+    const sale = useSelector ((state) => {
+        return state?.sales
     })
-    console.log(expense)
-    const { expenseAppErr, expenseServerErr, expenseLoading, UpdatedExpense} = expense;
-    console.log(UpdatedExpense)
+    
+    const { saleServerErr, saleAppErr, saleLoading} = sale;
+
     return (
         <section className="py-5 bg-secondary vh-100">
             <div className="container text-center">
@@ -51,7 +51,7 @@ const EditExpense = () => {
                     <img
                         className="img-fluid"
                         src={moneySVG}
-                        alt="SVGeXPENSES"
+                        alt="SVGSale"
                         width="200"
                     />
                 </a>
@@ -67,10 +67,10 @@ const EditExpense = () => {
                     ? " Update Income"
                     : " Update Expense"} */}
                                 </h2>
-                                 {/* Display expense Err */}
-                                 {expenseServerErr || expenseAppErr ? (
+                                {/* Display sale Err */}
+                                {saleServerErr || saleAppErr ? (
                                         <div className="alert alert-danger" role="alert">
-                                            {expenseServerErr} {expenseAppErr}
+                                            {saleServerErr} {saleAppErr}
                                         </div>
                                     ) : null}
 
@@ -119,7 +119,7 @@ const EditExpense = () => {
                                     {formik.touched.amount && formik.errors.amount}
                                 </div>
                                 <div>
-                                {expenseLoading?(<DisabledButton />): (<button
+                                {saleLoading?(<DisabledButton />): (<button
                                         type="submit"
                                         className="btn btn-primary py-2 w-100 mb-4"
                                     >
@@ -135,4 +135,4 @@ const EditExpense = () => {
     );
 };
 
-export default EditExpense;
+export default EditSale;
