@@ -9,7 +9,7 @@ ExpensesRoutes.post('/', auth, createExpensesCtrl);
 ExpensesRoutes.get('/', auth,fetchExpensesCtrl);
 ExpensesRoutes.get('/:id', auth,fetchOneExpense);
 ExpensesRoutes.put('/:id',auth, updateExpensesctrl);
-ExpensesRoutes.delete('/:id', auth,async (req, res)=> {deleteExpensesctrl});
+ExpensesRoutes.delete('/:id', auth.apply, deleteExpensesctrl);
 
 
 

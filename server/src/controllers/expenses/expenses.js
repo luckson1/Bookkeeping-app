@@ -25,7 +25,9 @@ const createExpensesCtrl =  expressAsyncHandler(async (req, res) => {
         user: req?.user?._id
         
       });
+      console.log(expense)
       res.json(expense);
+      
       
     } catch (error) {
       res.json(error);
@@ -47,16 +49,24 @@ const fetchOneExpense = expressAsyncHandler(async (req, res) => {
 //updates
 
 const updateExpensesctrl = expressAsyncHandler(async (req, res) => {
-    const { id } = req.params
-    const { title, description, amount, } = req.body
+    const { id } = req?.params;
+    const { title, amount, description } = req.body;
     try {
-        const expenses = await Expenses.findOneAndUpdate(id, { title, description, amount }, { new: true })
-        res.json(expense)
+      const expense = await Expenses.findByIdAndUpdate(
+        id,
+        {
+          title,
+          description,
+          amount,
+        },
+        { new: true }
+      );
+      res.json(expense);
     } catch (error) {
-
-        res.json(error)
+      res.json(error);
     }
-});
+  });
+
 
 //delete transaction
 

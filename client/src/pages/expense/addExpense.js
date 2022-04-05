@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
-import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup';
 import moneySVG from "../../img/money.svg";
 import { createExpenseAction } from "../../redux/slices/expenses/ExpenseSlices";
@@ -54,7 +53,7 @@ const AddExpense = () => {
         <>
             <section className="py-5 bg-danger vh-100">
                 <div className="container text-center">
-                    <a className="d-inline-block mb-5">
+                    <a className="d-inline-block mb-5" href="/">
                         <img
                             className="img-fluid"
                             src={moneySVG}

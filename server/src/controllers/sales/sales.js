@@ -15,20 +15,25 @@ const fetchsalesctrl = expressAsyncHandler(async (req, res) => {
 //create sales
 
 const createSaleCtrl = expressAsyncHandler(async (req, res) => {
-    const { title, amount, description, user } = res.body;
+    const { title, amount, description } = req.body;
+    
     try {
-        const sale = await Sales.create({
-
-            title,
-            amount,
-            description,
-            user
-        });
-        res.json(sale)
+      const sale = await Sales.create({
+        title,
+        amount,
+        description,
+        user: req?.user?._id
+        
+      });
+      console.log(sale)
+      res.json(sale);
+      
+      
     } catch (error) {
-        res.json(error)
+      res.json(error);
     }
-});
+  });
+
 
 //fetch single sale
 

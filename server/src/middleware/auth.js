@@ -11,12 +11,13 @@ const auth=expressAsyncHandler(async (req, res, next) => {
       try {
         if (token) {
           const decodedUser = jwt.verify(token, process.env.JWT_KEY);
-          console.log(decodedUser)
+         
           //find the user
           const user = await User.findById(decodedUser?.id);
          
           //attach the user the req obj
           req.user = user;
+          console.log(token)
           
           next();
         }

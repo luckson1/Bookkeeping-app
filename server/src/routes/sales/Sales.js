@@ -7,10 +7,10 @@ const salesRoutes=express.Router();
 
 
 salesRoutes.post('/', auth, createSaleCtrl);
-salesRoutes.get('/', auth,  async (req, res)=> {fetchsalesctrl});
-salesRoutes.get('/:id', auth, async (req, res)=> {fetchOneSale});
-salesRoutes.put('/:id', auth, async (req, res)=> {updateSalesctrl});
-salesRoutes.delete('/:id', auth, async (req, res)=> {deleteSalesctrl});
+salesRoutes.get('/', auth,  fetchsalesctrl);
+salesRoutes.get('/:id', auth, fetchOneSale);
+salesRoutes.put('/:id', updateSalesctrl);
+salesRoutes.delete('/:id', auth, deleteSalesctrl);
 
 
 
