@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
+import {useNavigate} from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import moneySVG from "../../img/money.svg";
 import { createExpenseAction } from "../../redux/slices/expenses/ExpenseSlices";
-
+import DisabledButton from "../../components/disableButton";
+import ErrorDisplayMessage from "../../components/ErrorDisplayMessage"
 // validation
 const formSchema = Yup.object({
     title: Yup.string().required("title is required"),
@@ -13,8 +15,8 @@ const formSchema = Yup.object({
 })
 const AddExpense = () => {
 
-    //history
-    // const navigate = useNavigate();
+    // history
+    const navigate = useNavigate();
 
 
     // dispatch
@@ -38,18 +40,18 @@ const AddExpense = () => {
 
         validationSchema: formSchema,
     });
-
+//get expense created from store 
     const expense = useSelector((state) => {
         return state?.expenses
     })
-    const { expenseAppErr, expenseServerErr} = expense;
+    const { expenseLoading,  expenseAppErr, expenseServerErr, isExpCreated} = expense;
 
-    // useEffect(() => {
-    //     if (expenseCreated) {
-    //         return navigate('/expenses')
-    //     }
-    // }, [expenseCreated])
-    return (
+    //redirect 
+
+useEffect (() => {
+    if (isExpCreated) navigate("/expenses")
+}, [isExpCreated, dispatch])
+        return (
         <>
             <section className="py-5 bg-danger vh-100">
                 <div className="container text-center">
@@ -69,9 +71,9 @@ const AddExpense = () => {
                                     <h2 className="mb-4 fw-light">Record New Expense</h2>
                                     {/* Display expense Err */}
                                     {expenseServerErr || expenseAppErr ? (
-                                        <div className="alert alert-danger" role="alert">
+                                        <ErrorDisplayMessage>
                                             {expenseServerErr} {expenseAppErr}
-                                        </div>
+                                        </ErrorDisplayMessage>
                                     ) : null}
                                     <div className="mb-3 input-group">
                                         <input
@@ -115,9 +117,11 @@ const AddExpense = () => {
                                     <div className="text-danger mb-2">
                                         {formik.touched.amount && formik.errors.amount}
                                     </div>
-                                    <button type="submit" className="btn btn-danger mb-4 w-100">
+                                   <div>
+                                       {expenseLoading? < DisabledButton />:  <button type="submit" className="btn btn-danger mb-4 w-100">
                                         Record Expense
-                                    </button>
+                                    </button> }
+                                   </div>
                                 </form>
                             </div>
                         </div>

@@ -1,15 +1,19 @@
 const expressAsyncHandler = require("express-async-handler");
-const Expenses = require('../../models/Expenses');
+const Expenses = require("../../models/Expenses");
+
 
 //fetch all expenses
 const fetchExpensesCtrl = expressAsyncHandler(async (req, res) => {
-    const {page}=req.query
-    try {
-        const expenses = await Expenses.paginate({}, {limit: 10, page: Number(page), populate: 'user'})
-        res.json(expenses)
-    } catch (error) {
-        res.json(error)
-    }
+  const { page } = req?.query;
+  try {
+    const expenses = await Expenses.paginate({},
+      
+      { limit: 20, page: Number(page), populate: "user" }
+    );
+    res.json(expenses);
+  } catch (error) {
+    res.json(error);
+  }
 });
 
 //create expenses

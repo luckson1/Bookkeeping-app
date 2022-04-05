@@ -1,39 +1,47 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit"
 import axios from 'axios'
 import { baseURL } from "../../../utils/baseURL";
+
+// actions for redirect 
+export const resetExpCreated = createAction("expense/created/reset")
+export const resetExpUpdated = createAction("expense/updated/reset")
+
 //create expense action
 
 export const createExpenseAction = createAsyncThunk(
     "expense/create",
     async (payload, { rejectWithValue, getState, dispatch }) => {
-      //get user token from store
-      const userToken = getState()?.users?.userAuth?.token;
-      
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userToken}`,
-        },
+        //get user token from store
+        const userToken = getState()?.users?.userAuth?.token;
 
-    };
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${userToken}`,
+            },
+
+        };
 
 
-    try {
-        //make http call here
+        try {
+            //make http call here
 
-        const { data } = await axios.post(`${baseURL}/expenses`, payload, config);
-        
-        return data;
-    } catch (error) {
-        if (!error?.response) {
-            throw error;
+            const { data } = await axios.post(`${baseURL}/expenses`, payload, config);
+            //dispatch for redirection
+            dispatch(resetExpCreated())
+
+            return data;
+
+        } catch (error) {
+            if (!error?.response) {
+                throw error;
+            }
+            return rejectWithValue(error?.response?.data);
         }
-        return rejectWithValue(error?.response?.data);
-    }
 
 
 
-});
+    });
 
 // fetching all expensesSlices
 export const FetchExpensesAction = createAsyncThunk('expense/fetch', async (payload, { rejectWithValue, getState, dispatch }) => {
@@ -52,8 +60,8 @@ export const FetchExpensesAction = createAsyncThunk('expense/fetch', async (payl
     try {
         //make http call here
 
-        const { data } = await axios.get(`${baseURL}/expenses?pages=${payload}`,  config);
-        
+        const { data } = await axios.get(`${baseURL}/expenses?pages=${payload}`, config);
+
         return data;
     } catch (error) {
         if (!error?.response) {
@@ -84,7 +92,7 @@ export const UpdateExpenseAction = createAsyncThunk('expense/update', async (pay
         //make http call here
 
         const { data } = await axios.put(`${baseURL}/expenses/${payload?.id}`, payload, config);
-        
+        dispatch(resetExpUpdated())
         return data;
     } catch (error) {
         if (!error?.response) {
@@ -108,6 +116,9 @@ const expensesSlices = createSlice({
             state.expenseLoading = true;
 
         });
+        builder.addCase(resetExpCreated, (state, action) => {
+            state.isExpCreated = true
+        })
 
         //hande success state
         builder.addCase(createExpenseAction.fulfilled, (state, action) => {
@@ -115,6 +126,7 @@ const expensesSlices = createSlice({
             state.expenseLoading = false;
             state.expenseAppErr = undefined;
             state.expenseServerErr = undefined;
+            state.isExpCreated = false
         });
         //hande rejected state
 
@@ -122,6 +134,7 @@ const expensesSlices = createSlice({
             state.expenseLoading = false;
             state.expenseAppErr = action?.payload?.msg;
             state.expenseServerErr = action?.error?.msg;
+            
         })
 
         //fetchAll
@@ -146,12 +159,15 @@ const expensesSlices = createSlice({
             state.expenseServerErr = action?.error?.msg;
         });
 
-           //update Expense
+        //update Expense
         // handle pending state
         builder.addCase(UpdateExpenseAction.pending, (state, action) => {
             state.expenseLoading = true;
 
         });
+        builder.addCase(resetExpUpdated, (state, action) => {
+            state.isExpUpdated = true
+        })
 
         //hande success state
         builder.addCase(UpdateExpenseAction.fulfilled, (state, action) => {
@@ -159,6 +175,7 @@ const expensesSlices = createSlice({
             state.expenseLoading = false;
             state.expenseAppErr = undefined;
             state.expenseServerErr = undefined;
+            state.isExpUpdated = false
         });
         //hande rejected state
 

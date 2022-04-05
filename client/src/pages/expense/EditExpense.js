@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import moneySVG from "../../img/money.svg";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UpdateExpenseAction } from "../../redux/slices/expenses/ExpenseSlices";
 import { useDispatch, useSelector } from "react-redux";
 import DisabledButton from "../../components/disableButton";
-
+import ErrorDisplayMessage from "../../components/ErrorDisplayMessage"
 
 
 const formSchema = Yup.object({
@@ -17,19 +17,22 @@ const formSchema = Yup.object({
 
 
 const EditExpense = () => {
+    // access location and state
     const location = useLocation()
+  //call dispatch
         const dispatch = useDispatch()
-
+//navigation and history
+const navigate = useNavigate ()
 
     //form formik
     const formik = useFormik({
         initialValues: {
-            title: location?.state?.expense?.title,
-            description: location?.state?.expense?.description,
-            amount: location?.state?.expense?.amount
+            title: location?.state?.title,
+            description: location?.state?.description,
+            amount: location?.state?.amount
         },
         onSubmit: values => {
-            const data= {...values, id: location?.state?.expense?._id}
+            const data= {...values, id: location?.state?._id}
             dispatch(UpdateExpenseAction(data))
 
 
@@ -41,9 +44,14 @@ const EditExpense = () => {
     const expense = useSelector ((state) => {
         return state?.expenses
     })
-    console.log(expense)
-    const { expenseAppErr, expenseServerErr, expenseLoading, UpdatedExpense} = expense;
-    console.log(UpdatedExpense)
+    
+    const { expenseAppErr, expenseServerErr, expenseLoading, isExpUpdated} = expense;
+    
+
+    //redirection
+    useEffect (() => {
+        if(isExpUpdated)navigate("/expenses")
+    }, [isExpUpdated, dispatch])
     return (
         <section className="py-5 bg-secondary vh-100">
             <div className="container text-center">
@@ -69,9 +77,9 @@ const EditExpense = () => {
                                 </h2>
                                  {/* Display expense Err */}
                                  {expenseServerErr || expenseAppErr ? (
-                                        <div className="alert alert-danger" role="alert">
+                                        <ErrorDisplayMessage>
                                             {expenseServerErr} {expenseAppErr}
-                                        </div>
+                                        </ErrorDisplayMessage>
                                     ) : null}
 
                                 <div className="mb-3 input-group">

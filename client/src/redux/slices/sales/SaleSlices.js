@@ -1,40 +1,44 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit"
 import axios from 'axios'
 import { baseURL } from "../../../utils/baseURL";
+
+// actions for redirect 
+export const resetSaleCreated = createAction("sale/created/reset")
+export const resetSaleUpdated = createAction("sale/updated/reset")
 //create sale action
 
 export const createsaleAction = createAsyncThunk(
     "sale/create",
     async (payload, { rejectWithValue, getState, dispatch }) => {
-      //get user token from store
-      const userToken = getState()?.users?.userAuth?.token;
-      
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userToken}`,
-        },
+        //get user token from store
+        const userToken = getState()?.users?.userAuth?.token;
 
-    };
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${userToken}`,
+            },
+
+        };
 
 
-    try {
-        //make http call here
+        try {
+            //make http call here
 
-        const { data } = await axios.post(`${baseURL}/sales`, payload, config);
-        
-        return data;
-        
-    } catch (error) {
-        if (!error?.response) {
-            throw error;
+            const { data } = await axios.post(`${baseURL}/sales`, payload, config);
+            dispatch(resetSaleCreated())
+            return data;
+
+        } catch (error) {
+            if (!error?.response) {
+                throw error;
+            }
+            return rejectWithValue(error?.response?.data);
         }
-        return rejectWithValue(error?.response?.data);
-    }
 
 
 
-});
+    });
 
 // fetching all salesSlices
 export const FetchSalesAction = createAsyncThunk('sale/fetch', async (payload, { rejectWithValue, getState, dispatch }) => {
@@ -53,8 +57,8 @@ export const FetchSalesAction = createAsyncThunk('sale/fetch', async (payload, {
     try {
         //make http call here
 
-        const { data } = await axios.get(`${baseURL}/sales?pages=${payload}`,  config);
-        
+        const { data } = await axios.get(`${baseURL}/sales?pages=${payload}`, config);
+
         return data;
     } catch (error) {
         if (!error?.response) {
@@ -85,7 +89,7 @@ export const UpdateSaleAction = createAsyncThunk('sale/update', async (payload, 
         //make http call here
 
         const { data } = await axios.put(`${baseURL}/sales/${payload?.id}`, payload, config);
-        
+        dispatch(resetSaleUpdated())
         return data;
     } catch (error) {
         if (!error?.response) {
@@ -109,13 +113,16 @@ const salesSlices = createSlice({
             state.saleLoading = true;
 
         });
-
+        builder.addCase(resetSaleCreated, (state, action) => {
+            state.isSaleCreated = true
+        })
         //hande success state
         builder.addCase(createsaleAction.fulfilled, (state, action) => {
             state.saleCreated = action?.payload;
             state.saleLoading = false;
             state.saleAppErr = undefined;
             state.saleServerErr = undefined;
+            state.isSaleCreated = false
         });
         //hande rejected state
 
@@ -147,19 +154,21 @@ const salesSlices = createSlice({
             state.saleServerErr = action?.error?.msg;
         });
 
-           //update sale
+        //update sale
         // handle pending state
         builder.addCase(UpdateSaleAction.pending, (state, action) => {
             state.saleLoading = true;
 
         });
-
+        builder.addCase(resetSaleUpdated, (state, action) => {
+            state.isSaleUpdated = true});
         //hande success state
         builder.addCase(UpdateSaleAction.fulfilled, (state, action) => {
             state.UpdatedSale = action?.payload;
             state.saleLoading = false;
             state.saleAppErr = undefined;
             state.saleServerErr = undefined;
+            state.isSaleUpdated = false
         });
         //hande rejected state
 

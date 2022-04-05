@@ -26,7 +26,7 @@ const ContentDetails = ({ item, path }) => {
             // onClick={() => navigate(history, "edit", item)}
             onClick={() =>
               
-              navigate({pathname: path}, { state: {sale: item} })
+              navigate({pathname: path}, { state: item })
             }
             className="badge bg-success-light text-success"
           >

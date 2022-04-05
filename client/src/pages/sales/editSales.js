@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect} from "react";
 import moneySVG from "../../img/money.svg";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DisabledButton from "../../components/disableButton";
 import { UpdateSaleAction } from "../../redux/slices/sales/SaleSlices";
+import ErrorDisplayMessage from "../../components/ErrorDisplayMessage"
 
 
 
@@ -17,19 +18,23 @@ const formSchema = Yup.object({
 
 
 const EditSale = () => {
+    //access location
     const location = useLocation()
         const dispatch = useDispatch()
 
 
+//navigation and History
+const navigate= useNavigate()
+
     //form formik
     const formik = useFormik({
         initialValues: {
-            title: location?.state?.sale?.title,
-            description: location?.state?.sale?.description,
-            amount: location?.state?.sale?.amount
+            title: location?.state?.title,
+            description: location?.state?.description,
+            amount: location?.state?.amount
         },
         onSubmit: values => {
-            const data= {...values, id: location?.state?.sale?._id}
+            const data= {...values, id: location?.state?._id}
             dispatch(UpdateSaleAction(data))
 
 
@@ -42,8 +47,13 @@ const EditSale = () => {
         return state?.sales
     })
     
-    const { saleServerErr, saleAppErr, saleLoading} = sale;
+    const { saleServerErr, saleAppErr, saleLoading, isSaleUpdated} = sale;
 
+
+    // redirection
+    useEffect(() => {
+        if (isSaleUpdated) navigate("/sales")
+    }, [isSaleUpdated, dispatch])
     return (
         <section className="py-5 bg-secondary vh-100">
             <div className="container text-center">
@@ -69,9 +79,9 @@ const EditSale = () => {
                                 </h2>
                                 {/* Display sale Err */}
                                 {saleServerErr || saleAppErr ? (
-                                        <div className="alert alert-danger" role="alert">
+                                        <ErrorDisplayMessage>
                                             {saleServerErr} {saleAppErr}
-                                        </div>
+                                        </ErrorDisplayMessage>
                                     ) : null}
 
                                 <div className="mb-3 input-group">

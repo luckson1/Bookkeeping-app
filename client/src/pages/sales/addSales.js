@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import moneySVG from "../../img/money.svg";
 import { createsaleAction } from "../../redux/slices/sales/SaleSlices";
-
+import DisabledButton from "../../components/disableButton";
+import ErrorDisplayMessage from "../../components/ErrorDisplayMessage"
+import { useNavigate } from "react-router-dom";
 
 
 // validation
@@ -40,9 +42,14 @@ const AddSale = () => {
     const sale = useSelector((state) => {
         return state?.sales
     })
-    const { saleAppErr, saleServerErr} = sale;
+    const { saleLoading, saleAppErr, saleServerErr, isSaleCreated} = sale;
 
-   
+//navigation and history
+const navigate= useNavigate()
+    //dispatch
+    useEffect(()=> {
+        if (isSaleCreated) navigate('/sales')
+    }, [isSaleCreated, dispatch])
     return (
         <>
             <section className="py-5 bg-success vh-100">
@@ -63,9 +70,9 @@ const AddSale = () => {
                                     <h2 className="mb-4 fw-light">Record Sale</h2>
                                     {/* Display income Err */}
                                     {saleServerErr || saleAppErr ? (
-                                        <div className="alert alert-danger" role="alert">
+                                        <ErrorDisplayMessage>
                                             {saleServerErr} {saleAppErr}
-                                        </div>
+                                        </ErrorDisplayMessage>
                                     ) : null}
                                     <div className="mb-3 input-group">
                                         <input
@@ -109,9 +116,12 @@ const AddSale = () => {
                                     <div className="text-success mb-2">
                                         {formik.touched.amount && formik.errors.amount}
                                     </div>
-                                    <button type="submit" className="btn btn-success mb-4 w-100">
+                                    
+                                   <div>
+                                       {saleLoading? < DisabledButton />:  <button type="submit" className="btn btn-success mb-4 w-100">
                                         Record Sale
-                                    </button>
+                                    </button> }
+                                   </div>
                                 </form>
                             </div>
                         </div>
