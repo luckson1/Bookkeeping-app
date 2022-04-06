@@ -15,6 +15,8 @@ import ExpensesList from './pages/expense/ExpenseList';
 import EditExpense from './pages/expense/EditExpense';
 import SalesList from './pages/sales/salesList';
 import EditSale from './pages/sales/editSales';
+import DashboardData from './pages/users/DashboardData';
+
 
 
 function App() {
@@ -32,7 +34,7 @@ function App() {
             path="/dashboard"
             element={
               <AdminRoute>
-                <Profile />
+                <DashboardData />
               </AdminRoute>
             }
           />

@@ -17,7 +17,7 @@ const auth=expressAsyncHandler(async (req, res, next) => {
          
           //attach the user the req obj
           req.user = user;
-          console.log(token)
+          
           
           next();
         }

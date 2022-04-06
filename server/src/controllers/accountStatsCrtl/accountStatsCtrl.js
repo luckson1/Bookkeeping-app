@@ -38,7 +38,7 @@ try {
             }
         }
     ])
-    res.json(salesStats, expenseStats)
+    res.json({salesStats, expenseStats})
 } catch (error) {
    res.json(error) 
 }

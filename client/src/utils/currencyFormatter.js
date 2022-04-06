@@ -1,8 +1,5 @@
-const currencyFormatter = (symbol, amount) => {
-    return new Intl.NumberFormat("en", {
-      style: "currency",
-      currency: symbol,
-    }).format(amount);
+const currencyFormatter = (number) => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: "Ksh" }).format(number)
   };
   
   export default currencyFormatter;

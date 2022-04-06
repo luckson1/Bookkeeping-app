@@ -17,7 +17,7 @@ const ContentDetails = ({ item, path }) => {
 
         <td className="p-6">{item?.title}</td>
         <td className="p-6">{item?.description}</td>
-        <td className="p-6">{currencyFormatter("USD", item?.amount)}</td>
+        <td className="p-6">{currencyFormatter(item?.amount)}</td>
         <td className="p-6">
           {item?.createdAt && dateFormatter(item?.createdAt)}
         </td>

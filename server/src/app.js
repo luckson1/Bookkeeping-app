@@ -40,7 +40,7 @@ app.use("/api/sales", salesRoutes);
 app.use("/api/expenses", ExpensesRoutes);
 
 //accounts stats 
-app.use('/', accountStatsRoute)
+app.use('/api/accounts-statistics', accountStatsRoute)
 
 //errors
 
