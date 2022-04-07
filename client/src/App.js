@@ -16,6 +16,7 @@ import EditExpense from './pages/expense/EditExpense';
 import SalesList from './pages/sales/salesList';
 import EditSale from './pages/sales/editSales';
 import DashboardData from './pages/users/DashboardData';
+import UpdateProfile from './pages/users/UpdateProfile';
 
 
 
@@ -94,7 +95,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+           <Route
+            path="/update"
+            element={
+              <ProtectedRoute>
+                <UpdateProfile />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
+        
 
       </BrowserRouter>
     </div>

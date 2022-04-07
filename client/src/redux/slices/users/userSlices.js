@@ -1,7 +1,10 @@
 
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit"
 import axios from 'axios'
 import { baseURL } from "../../../utils/baseURL";
+
+//action for redirection
+export const resetProfileUpdated = createAction("expense/updated/reset")
 //login action
 
 export const loginUserAction = createAsyncThunk('user/login', async (payload, { rejectWithValue, getState, dispatch }) => {
@@ -75,6 +78,59 @@ export const logout = createAsyncThunk(
         }
     }
 );
+
+
+// Profile
+
+export const fetchUserProfileAction = createAsyncThunk('user/profile', async (payload, { rejectWithValue, getState, dispatch }) => {
+    const userToken = getState()?.users?.userAuth?.token;
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+        },
+    };
+
+    try {
+        //http call
+        const { data } = await axios.get(
+            `${baseURL}/users/profile`, config);
+        return data;
+
+    } catch (error) {
+        if (!error?.response) {
+            throw error;
+        }
+        return rejectWithValue(error?.response?.data);
+    }
+}
+);
+
+//update profile state
+export const updateProfileAction = createAsyncThunk( "update/userProfile",
+ async(payload, { rejectWithValue, getState, dispatch })=> {
+ //get user token from store
+ const userToken = getState()?.users?.userAuth?.token;
+
+ const config = {
+     headers: {
+         "Content-Type": "application/json",
+         Authorization: `Bearer ${userToken}`,
+     },
+
+ };
+
+    try {
+    const {data}= await axios.put(`${baseURL}/users/update`, payload, config)
+    dispatch(resetProfileUpdated())
+    return data
+} catch (error) {
+    if (!error?.response) {
+        throw error;
+    }
+    return rejectWithValue(error?.response?.data);
+}
+});
 // login slices
 
 //Get user from storage
@@ -137,6 +193,60 @@ const usersSlices = createSlice({
             state.userAuth = undefined;
             state.userLoading = false;
         });
+        // profile
+
+        // handle pending state
+        builder.addCase(fetchUserProfileAction.pending, (state, action) => {
+            state.profileLoading = true;
+            state.profileAppErr = undefined;
+            state.profileServerErr = undefined;
+        });
+
+        //hande success state
+        builder.addCase(fetchUserProfileAction.fulfilled, (state, action) => {
+            state.userProfile = action?.payload;
+            state.profileLoading = false;
+            state.profileAppErr = undefined;
+            state.profileServerErr = undefined;
+        });
+        //hande rejected state
+
+        builder.addCase(fetchUserProfileAction.rejected, (state, action) => {
+
+            state.profileLoading = false;
+            state.profileAppErr = action?.payload?.msg;
+            state.profileServerErr = action?.error?.msg;
+        });
+
+         // update profile
+
+        // handle pending state
+        builder.addCase(updateProfileAction.pending, (state, action) => {
+            state.profileLoading = true;
+            state.profileAppErr = undefined;
+            state.profileServerErr = undefined;
+        });
+        builder.addCase(resetProfileUpdated, (state, action) => {
+            state.isProfileUpdated = true
+        })
+
+        //hande success state
+        builder.addCase(updateProfileAction.fulfilled, (state, action) => {
+            state.newProfile = action?.payload;
+            state.profileLoading = false;
+            state.profileAppErr = undefined;
+            state.profileServerErr = undefined;
+            state.isProfileUpdated = false
+        });
+        //hande rejected state
+
+        builder.addCase(updateProfileAction.rejected, (state, action) => {
+
+            state.profileLoading = false;
+            state.profileAppErr = action?.payload?.msg;
+            state.profileServerErr = action?.error?.msg;
+        });
+
 
 
     }

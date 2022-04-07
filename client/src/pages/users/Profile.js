@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch , useSelector } from "react-redux";
+import { fetchUserProfileAction } from "../../redux/slices/users/userSlices";
 const Profile = () => {
+  // Dispatch
+  const dispatch=useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchUserProfileAction ())
+  }, [dispatch]);
+
+  //get state from store
+  const profile= useSelector((state) => {return state?.users})
+
+  const{profileLoading, profileAppErr, profileServerErr, userProfile}=profile
   const navigate = useNavigate();
   return (
     <>
@@ -16,17 +29,18 @@ const Profile = () => {
               />
               <div>
                 <h6 className="fw-bold mb-0">
-                  <span>{/* {profile?.firstname} {profile?.lastname} */}</span>
+                  <span>{userProfile?.firstname} {userProfile?.lastname}</span>
                   <span className="badge ms-2 bg-primary-light text-primary">
                     {/* {profile?.expenses?.length + profile?.income?.length}{" "} */}
                     Records Created
                   </span>
                 </h6>
-                {/* <p className="mb-0">{profile?.email}</p> */}
+                <p className="mb-0">{userProfile?.email}</p>
                 <p className="mb-0">Date Joined: 12-Jan-1999</p>
                 <button
                   // onClick={() => navigate(history, "update-profile", profile)}
-                  className="btn"
+                  onClick={() =>navigate({pathname: '/update'}, {state: userProfile})}
+                  className="btn btn-warning"
                 >
                   Edit Profile
                   <i class="bi bi-pen fs-3 m-3 text-primary"></i>
