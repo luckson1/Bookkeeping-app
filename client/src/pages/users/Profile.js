@@ -2,6 +2,10 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch , useSelector } from "react-redux";
 import { fetchUserProfileAction } from "../../redux/slices/users/userSlices";
+import LoadingComponent from "../../components/Loading";
+import ErrorDisplayMessage from "../../components/ErrorDisplayMessage"
+import { accountsStatsAction } from "../../redux/slices/accountStats/accountStatsSlices";
+import GraphDtata from "../../components/GraphData";
 const Profile = () => {
   // Dispatch
   const dispatch=useDispatch()
@@ -31,7 +35,7 @@ const Profile = () => {
                 <h6 className="fw-bold mb-0">
                   <span>{userProfile?.firstname} {userProfile?.lastname}</span>
                   <span className="badge ms-2 bg-primary-light text-primary">
-                    {/* {profile?.expenses?.length + profile?.income?.length}{" "} */}
+                    {userProfile?.expenses?.length + userProfile?.sales?.length}{" "}
                     Records Created
                   </span>
                 </h6>
