@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch , useSelector } from "react-redux";
 import { fetchUserProfileAction } from "../../redux/slices/users/userSlices";
 import LoadingComponent from "../../components/Loading";
-import ErrorDisplayMessage from "../../components/ErrorDisplayMessage"
-import { accountsStatsAction } from "../../redux/slices/accountStats/accountStatsSlices";
+import ErrorDisplayMessage from "../../components/ErrorDisplayMessage";
+import calcTransaction from "../../utils/accountStats";
+import UserProfileStats from "../users/UserProfileStats"
 import GraphDtata from "../../components/GraphData";
 const Profile = () => {
   // Dispatch
@@ -19,8 +20,21 @@ const Profile = () => {
 
   const{profileLoading, profileAppErr, profileServerErr, userProfile}=profile
   const navigate = useNavigate();
+//Get sales statistics
+const salesResult =
+userProfile?.sales && calcTransaction(userProfile?.sales ? userProfile.sales : []);
+
+  //Get expense statistics
+  const expResult = userProfile?.expenses && calcTransaction(userProfile?.expenses);
   return (
     <>
+     {profileLoading ? (
+        <LoadingComponent />
+      ) : profileAppErr || profileServerErr ? (
+        <ErrorDisplayMessage>
+          {profileServerErr} {profileAppErr}
+        </ErrorDisplayMessage>
+      ) : (
       <section className="py-5">
         <div className="container">
           <div className="position-relative p-8 border rounded-2">
@@ -47,29 +61,27 @@ const Profile = () => {
                   className="btn btn-warning"
                 >
                   Edit Profile
-                  <i class="bi bi-pen fs-3 m-3 text-primary"></i>
+                   <i class="bi bi-pen fs-3 m-3 text-primary"></i>
                 </button>
               </div>
-              {/* <DataGraph
-                income={incResult?.sumTotal}
+              <GraphDtata
+                sales={salesResult?.sumTotal}
                 expenses={expResult?.sumTotal}
-              /> */}
+              />
             </div>
 
-            <p className="mb-8"> </p>
-
-            {/* <UserProfileStats
-              numOfTransExp={profile?.expenses?.length}
-              avgExp={expResult?.avg}
-              totalExp={expResult?.sumTotal}
-              minExp={expResult?.min}
-              maxExp={expResult?.max}
-              numOfTransInc={profile?.income?.length}
-              avgInc={incResult?.avg}
-              totalInc={incResult?.sumTotal}
-              minInc={incResult?.min}
-              maxInc={incResult?.max}
-            /> */}
+            <UserProfileStats
+                numOfTransExp={userProfile?.expenses?.length}
+                avgExp={expResult?.avg}
+                totalExp={expResult?.sumTotal}
+                minExp={expResult?.min}
+                maxExp={expResult?.max}
+                numOfTransSales={userProfile?.sales?.length}
+                avgSales={salesResult?.avg}
+                totalSales={salesResult?.sumTotal}
+                minSales={salesResult?.min}
+                maxSales={salesResult?.max}
+              />
             <div className="d-flex align-items-center justify-content-center">
               <button
                 // onClick={() => navigate(history, "user-profile-expenses", "")}
@@ -78,7 +90,7 @@ const Profile = () => {
                 <span>View Expenses History</span>
               </button>
               <button
-                // onClick={() => navigate(history, "user-profile-income", "")}
+                // onClick={() => navigate(history, "user-profile-sales", "")}
                 className="btn w-100 btn-outline-success d-flex align-items-center justify-content-center"
               >
                 <span>View Sales History</span>
@@ -86,7 +98,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section>)}
     </>
   );
 };

@@ -4,6 +4,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector} from "react-redux";
 import { updateProfileAction } from "../../redux/slices/users/userSlices";
+import ErrorDisplayMessage from "../../components/ErrorDisplayMessage";
+import DisabledButton from "../../components/disableButton";
 
 // validation
 const formSchema = Yup.object({
@@ -36,7 +38,7 @@ const UpdateProfile = () => {
     });
 // get state from store
     const updatedProfile= useSelector ((state) => {return state?.users})
-    const{profileLoading, profileAppErr, isProfileUpdated, profileServerErr, newProfile}=updatedProfile
+    const{profileLoading, profileAppErr, isProfileUpdated, profileServerErr}=updatedProfile
     const navigate = useNavigate();
     // redirection
     useEffect (() => {
@@ -44,6 +46,11 @@ const UpdateProfile = () => {
     }, [isProfileUpdated, dispatch])
   return (
     <>
+     {profileAppErr || profileServerErr ? (
+        <ErrorDisplayMessage>
+          {profileServerErr} {profileAppErr}
+        </ErrorDisplayMessage>
+      ) : (
       <section className="py-5 bg-success vh-100">
         <div className="container text-center">
           <div className="row mb-4">
@@ -113,16 +120,20 @@ const UpdateProfile = () => {
                     role="group"
                     aria-label="Basic mixed styles example"
                   >
-                    <button type="submit" class="btn btn-warning">
-                      Update
-                    </button>
+                     {profileLoading ? (
+                        <DisabledButton />
+                      ) : (
+                        <button type="submit" class="btn btn-warning">
+                          Update
+                        </button>
+                      )}
                   </div>
                 </form>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </section>)};
     </>
   );
 };
