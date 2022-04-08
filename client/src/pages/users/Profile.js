@@ -85,12 +85,15 @@ userProfile?.sales && calcTransaction(userProfile?.sales ? userProfile.sales : [
             <div className="d-flex align-items-center justify-content-center">
               <button
                 // onClick={() => navigate(history, "user-profile-expenses", "")}
+                onClick={() =>navigate({pathname: "/user-expenses-list"}, {state: userProfile?.expenses})}
+                
                 className="btn me-4 w-100 btn-danger d-flex align-items-center justify-content-center"
               >
                 <span>View Expenses History</span>
               </button>
               <button
                 // onClick={() => navigate(history, "user-profile-sales", "")}
+                onClick={() =>navigate({pathname: "/user-sales-list"}, {state: userProfile?.sales})}
                 className="btn w-100 btn-outline-success d-flex align-items-center justify-content-center"
               >
                 <span>View Sales History</span>

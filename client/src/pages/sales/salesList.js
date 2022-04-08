@@ -20,7 +20,7 @@ const SalesList = () => {
     //get all sales 
     const allSales = useSelector(state => state?.sales);
     const { saleLoading, saleAppErr, saleServerErr, saleList } = allSales
-    console.log(saleList?.total)
+   
     return (
         <>
             {saleLoading ? <LoadingComponent /> : saleServerErr || saleAppErr ?

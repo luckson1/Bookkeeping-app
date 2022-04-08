@@ -17,6 +17,8 @@ import SalesList from './pages/sales/salesList';
 import EditSale from './pages/sales/editSales';
 import DashboardData from './pages/users/DashboardData';
 import UpdateProfile from './pages/users/UpdateProfile';
+import UserSalesList from './pages/users/UserSalesList';
+import UserExpensesList from './pages/users/UserExpensesList';
 
 
 
@@ -101,6 +103,25 @@ function App() {
               <ProtectedRoute>
                 <UpdateProfile />
               </ProtectedRoute>
+              
+            }
+          />
+           <Route
+            path="/user-sales-list"
+            element={
+              <ProtectedRoute>
+                <UserSalesList />
+              </ProtectedRoute>
+              
+            }
+          />
+          <Route
+            path="/user-expenses-list"
+            element={
+              <ProtectedRoute>
+                <UserExpensesList />
+              </ProtectedRoute>
+              
             }
           />
         </Routes>
