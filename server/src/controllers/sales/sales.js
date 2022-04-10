@@ -2,16 +2,19 @@ const expressAsyncHandler = require("express-async-handler");
 const Sales = require('../../models/Sales');
 
 //fetch all sales
-const fetchsalesctrl = expressAsyncHandler(async (req, res) => {
-    const {page} =req.query;
+const fetchSalesCtrl = expressAsyncHandler(async (req, res) => {
+        const { page } = req.query;
+        
     try {
-        const sales = await Sales.paginate({}, {limit: 10, page: Number(page), populate:"user"  })
-        res.json(sales)
+      const sales = await Sales.paginate(
+        {},
+        { limit: 10, page: Number(page), populate: "user" }
+      );
+      res.json(sales);
     } catch (error) {
-        res.json(error)
+      res.json(error);
     }
-});
-
+  });
 //create sales
 
 const createSaleCtrl = expressAsyncHandler(async (req, res) => {
@@ -25,7 +28,7 @@ const createSaleCtrl = expressAsyncHandler(async (req, res) => {
         user: req?.user?._id
         
       });
-      console.log(sale)
+      
       res.json(sale);
       
       
@@ -74,4 +77,4 @@ const deleteSalesctrl = expressAsyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { createSaleCtrl, fetchsalesctrl, fetchOneSale, updateSalesctrl, deleteSalesctrl }
+module.exports = { createSaleCtrl, fetchSalesCtrl, fetchOneSale, updateSalesctrl, deleteSalesctrl }

@@ -18,7 +18,7 @@ const DashboardData = () => {
     
     const salesData=statsList?.salesStats?.[0]
     const expensesData= statsList?.expenseStats?.[0]
-    console.log(expensesData)
+   
   //format date
   return (
       <>

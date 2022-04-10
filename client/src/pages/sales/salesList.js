@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
-import { AppPagination } from "../../components/AppPagination";
+// import { AppPagination } from "../../components/AppPagination";
 import ContentDetails from "../../components/ContentDetails";
 import ErrorDisplayMessage from "../../components/ErrorDisplayMessage";
 import LoadingComponent from "../../components/Loading";
-import { FetchSalesAction } from "../../redux/slices/sales/SaleSlices";
-
+// import { FetchSalesAction } from "../../redux/slices/sales/SaleSlices";
+import { fetchUserProfileAction } from "../../redux/slices/users/userSlices";
 const SalesList = () => {
 
     //dispatch
     const dispatch = useDispatch()
 
-    const [page, setPage] = useState(1)
-    useEffect(() => {
-        dispatch(FetchSalesAction(+page))
-    }, [dispatch, page, setPage]);
+    // const [page, setPage] = useState(1)
+    
     //get all sales 
-    const allSales = useSelector(state => state?.sales);
-    const { saleLoading, saleAppErr, saleServerErr, saleList } = allSales
-   
+    const allSales = useSelector(state => state?.users);
+    const { profileLoading, profileAppErr, profileServerErr, userProfile } = allSales
+    useEffect(() => {
+        dispatch(fetchUserProfileAction())
+    }, [dispatch]);
     return (
         <>
-            {saleLoading ? <LoadingComponent /> : saleServerErr || saleAppErr ?
+            {profileLoading ? <LoadingComponent /> : profileServerErr || profileAppErr ?
                 < ErrorDisplayMessage>
                     Err
                 </ErrorDisplayMessage> :
@@ -32,7 +32,7 @@ const SalesList = () => {
                         <div className="position-relative border rounded-2">
                             <a className="position-absolute top-0 end-0 mt-4 me-4" href="/">.</a>
                             <div className="pt-8 px-8 mb-8">
-                                <h6 className="mb-0 fs-3">Recent Sale transactions</h6>
+                                <h6 className="mb-0 fs-3">Recent sale transactions</h6>
                                 <p className="mb-0">
                                     Below is the history of your Sale transactions records
                                 </p>
@@ -43,11 +43,7 @@ const SalesList = () => {
                             <table className="table">
                                 <thead>
                                     <tr className="table-active">
-                                        <th scope="col">
-                                            <button className="btn d-flex align-items-centerr text-uppercase">
-                                                <small>Created By</small>
-                                            </button>
-                                        </th>
+                                        
                                         <th scope="col">
                                             <button className="btn d-flex align-items-centerr text-uppercase">
                                                 <small>Title</small>
@@ -76,14 +72,15 @@ const SalesList = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {saleLoading ? (
+                                    {profileLoading ? (
                                         <h1>Loading</h1>
-                                    ) : saleServerErr || saleAppErr ? (
+                                    ) : profileServerErr || profileAppErr ? (
                                         <div>Err</div>
-                                    ) : saleList?.docs?.length <= 0 ? (
+                                    ) : userProfile?.sales?.length <= 0 ? (
                                         <h1>No sales Found</h1>
-                                    ) : (saleList?.docs?.map(sale => {
-                                        return <ContentDetails item={sale} key={sale?._id} path={"/edit-sale"}/>
+                                    ) : (userProfile?.sales?.map(sale => {
+                                        
+                                        return <ContentDetails item={sale} key={sale?._id} path={"/edit-sale"} />
                                     }))}
                                 </tbody>
                             </table>
@@ -99,7 +96,7 @@ const SalesList = () => {
                     >
                         {/* Call App Pagination here */}
                         <div>
-                            <AppPagination pageNumber={saleList?.total} setPage={setPage} />
+                            {/* <AppPagination pageNumber={saleList?.total} setPage={setPage} /> */}
 
                         </div>
                     </div>

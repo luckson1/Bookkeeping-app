@@ -174,7 +174,7 @@ const usersSlices = createSlice({
 
         //hande success state
         builder.addCase(registerUserAction.fulfilled, (state, action) => {
-            state.userAuth = action?.payload;
+            state.isRegistered = action?.payload;
             state.userLoading = false;
             state.userAppErr = undefined;
             state.userServerErr = undefined;

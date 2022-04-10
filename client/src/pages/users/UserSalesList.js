@@ -8,7 +8,7 @@ import UserProfileContentDetails from "./UserProfileContentDetails";
 const UserSalesList = () => {
     const location = useLocation()
     const sales = location?.state
-    console.log(sales)
+    
 
     // get user profile from store
     const profile= useSelector((state) => {return state?.users});

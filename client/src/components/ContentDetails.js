@@ -6,15 +6,11 @@ import dateFormatter from "../utils/dateFormatter";
 
 
 const ContentDetails = ({ item, path }) => {
-  
+
   const navigate = useNavigate();
   return (
     <>
       <tr className="align-middle text-dark">
-        <th className="p-6" scope="row">
-          {item?.user?.firstname} {item?.user?.lastname}
-        </th>
-
         <td className="p-6">{item?.title}</td>
         <td className="p-6">{item?.description}</td>
         <td className="p-6">{currencyFormatter(item?.amount)}</td>
@@ -25,8 +21,8 @@ const ContentDetails = ({ item, path }) => {
           <button
             // onClick={() => navigate(history, "edit", item)}
             onClick={() =>
-              
-              navigate({pathname: path}, { state: item })
+
+              navigate({ pathname: path }, { state: item })
             }
             className="badge bg-success-light text-success"
           >

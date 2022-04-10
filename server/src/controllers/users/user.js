@@ -54,11 +54,11 @@ const fetchAllCtrl= expressAsyncHandler( async (req, res)=> {
 // profile
 
 const userProfileCtrl = expressAsyncHandler(async (req, res) => {
+const id=req?.user?._id
   try {
     const profile = await User.findById(req?.user?._id).populate([
       "expenses",
       "sales",
-      
     ]);
 
     res.json(profile);

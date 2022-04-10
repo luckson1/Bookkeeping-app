@@ -2,28 +2,30 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
-import { AppPagination } from "../../components/AppPagination";
+// import { AppPagination } from "../../components/AppPagination";
 import ContentDetails from "../../components/ContentDetails";
 import ErrorDisplayMessage from "../../components/ErrorDisplayMessage";
 import LoadingComponent from "../../components/Loading";
-import { FetchExpensesAction } from "../../redux/slices/expenses/ExpenseSlices";
+import { fetchUserProfileAction } from "../../redux/slices/users/userSlices";
+// import { FetchExpensesAction } from "../../redux/slices/expenses/ExpenseSlices";
 
 const ExpensesList = () => {
 
     //dispatch
     const dispatch = useDispatch()
 
-    const [page, setPage] = useState(1)
+    // const [page, setPage] = useState(1)
     useEffect(() => {
-        dispatch(FetchExpensesAction(+page))
-    }, [dispatch, page, setPage]);
+        dispatch(fetchUserProfileAction ())
+    }, [dispatch]);
     //get all expenses
-    const allExpenses = useSelector(state => state?.expenses);
-    const { expenseLoading, expenseServerErr, expenseAppErr, expenseList } = allExpenses
-    console.log(expenseList?.total)
+    const allExpenses = useSelector(state => state?.users);
+    const { profileLoading, profileAppErr, profileServerErr, userProfile } = allExpenses
+    
+    
     return (
         <>
-            {expenseLoading ? <LoadingComponent /> : expenseAppErr || expenseServerErr ?
+            {profileLoading ? <LoadingComponent /> : profileServerErr || profileAppErr ?
                 < ErrorDisplayMessage>
                     Err
                 </ErrorDisplayMessage> :
@@ -41,13 +43,9 @@ const ExpensesList = () => {
                                 </Link>
                             </div>
                             <table className="table">
-                                <thead>
+                            <thead>
                                     <tr className="table-active">
-                                        <th scope="col">
-                                            <button className="btn d-flex align-items-centerr text-uppercase">
-                                                <small>Created By</small>
-                                            </button>
-                                        </th>
+                                        
                                         <th scope="col">
                                             <button className="btn d-flex align-items-centerr text-uppercase">
                                                 <small>Title</small>
@@ -76,13 +74,14 @@ const ExpensesList = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {expenseLoading ? (
+                                    {profileLoading ? (
                                         <h1>Loading</h1>
-                                    ) : expenseAppErr || expenseServerErr ? (
+                                    ) : profileServerErr || profileAppErr ? (
                                         <div>Err</div>
-                                    ) : expenseList?.docs?.length <= 0 ? (
+                                    ) : userProfile?.expenses?.length <= 0 ? (
                                         <h1>No Expenses Found</h1>
-                                    ) : (expenseList?.docs?.map(exp => {
+                                    ) : (userProfile?.expenses?.map(exp => {
+                                       
                                         return <ContentDetails item={exp} key={exp?._id} path={"/edit-expense"}/>
                                     }))}
                                 </tbody>
@@ -99,7 +98,7 @@ const ExpensesList = () => {
                     >
                         {/* Call App Pagination here */}
                         <div>
-                            <AppPagination pageNumber={expenseList?.total} setPage={setPage} />
+                            {/* <AppPagination pageNumber={userProfile?.total} setPage={setPage} /> */}
 
                         </div>
                     </div>

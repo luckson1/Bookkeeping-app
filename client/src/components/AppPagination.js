@@ -1,6 +1,6 @@
 import React from 'react';
 export const AppPagination = ({pageNumber, setPage}) => {
-    console.log(pageNumber)
+   
     const array=Array.from(Array(pageNumber).keys());
     
     return (<nav aria-label="Page navigation example">
