@@ -8,7 +8,7 @@ const fetchExpensesCtrl = expressAsyncHandler(async (req, res) => {
   try {
     const expenses = await Expenses.paginate({},
       
-      { limit: 20, page: Number(page), populate: "user" }
+      { limit: 10, page: Number(page), populate: "user" }
     );
     res.json(expenses);
   } catch (error) {
@@ -29,7 +29,7 @@ const createExpensesCtrl =  expressAsyncHandler(async (req, res) => {
         user: req?.user?._id
         
       });
-      console.log(expense)
+      
       res.json(expense);
       
       

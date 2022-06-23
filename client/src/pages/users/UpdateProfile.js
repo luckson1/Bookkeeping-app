@@ -43,7 +43,7 @@ const UpdateProfile = () => {
     // redirection
     useEffect (() => {
         if (isProfileUpdated) navigate("/profile")
-    }, [isProfileUpdated, dispatch])
+    }, [isProfileUpdated, dispatch, navigate])
   return (
     <>
      {profileAppErr || profileServerErr ? (
@@ -116,14 +116,14 @@ const UpdateProfile = () => {
                   </div>
 
                   <div
-                    class="btn-group"
+                    className="btn-group"
                     role="group"
                     aria-label="Basic mixed styles example"
                   >
                      {profileLoading ? (
                         <DisabledButton />
                       ) : (
-                        <button type="submit" class="btn btn-warning">
+                        <button type="submit" className="btn btn-warning">
                           Update
                         </button>
                       )}

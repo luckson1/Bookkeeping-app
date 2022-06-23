@@ -36,9 +36,11 @@ export const loginUserAction = createAsyncThunk('user/login', async (payload, { 
 });
 
 
-//register
+//register action 
 
 export const registerUserAction = createAsyncThunk('user/register', async (payload, { rejectWithValue, getState, dispatch }) => {
+    
+    // configuring the request
     const config = {
         headers: {
             "Content-Type": "application/json",
