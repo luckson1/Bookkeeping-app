@@ -1,34 +1,42 @@
 const expressAsyncHandler = require("express-async-handler");
-const Expenses = require('../../models/Expenses');
+const Expenses = require("../../models/Expenses");
+
 
 //fetch all expenses
 const fetchExpensesCtrl = expressAsyncHandler(async (req, res) => {
-    const {page}=req.query
-    try {
-        const expenses = await Expenses.paginate({}, {limit: 10, page: Number(page), populate: 'user'})
-        res.json(expenses)
-    } catch (error) {
-        res.json(error)
-    }
+  const { page } = req?.query;
+  try {
+    const expenses = await Expenses.paginate({},
+      
+      { limit: 10, page: Number(page), populate: "user" }
+    );
+    res.json(expenses);
+  } catch (error) {
+    res.json(error);
+  }
 });
 
 //create expenses
 
-const createExpensesCtrl = expressAsyncHandler(async (req, res) => {
-    const { title, amount, description, user } = res.body;
+const createExpensesCtrl =  expressAsyncHandler(async (req, res) => {
+    
+    const { title, amount, description } = req.body;
     try {
-        const expense = await Expenses.create({
-
-            title,
-            amount,
-            description,
-            user
-        });
-        res.json(expense)
+      const expense = await Expenses.create({
+        title,
+        amount,
+        description,
+        user: req?.user?._id
+        
+      });
+      
+      res.json(expense);
+      
+      
     } catch (error) {
-        res.json(error)
+      res.json(error);
     }
-});
+  });
 
 //fetch single expenses
 
@@ -45,16 +53,24 @@ const fetchOneExpense = expressAsyncHandler(async (req, res) => {
 //updates
 
 const updateExpensesctrl = expressAsyncHandler(async (req, res) => {
-    const { id } = req.params
-    const { title, description, amount, } = req.body
+    const { id } = req?.params;
+    const { title, amount, description } = req.body;
     try {
-        const expenses = await Expenses.findOneAndUpdate(id, { title, description, amount }, { new: true })
-        res.json(expense)
+      const expense = await Expenses.findByIdAndUpdate(
+        id,
+        {
+          title,
+          description,
+          amount,
+        },
+        { new: true }
+      );
+      res.json(expense);
     } catch (error) {
-
-        res.json(error)
+      res.json(error);
     }
-});
+  });
+
 
 //delete transaction
 

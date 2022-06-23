@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch , useSelector } from "react-redux";
 import { useFormik } from "formik";
+import {useNavigate} from 'react-router-dom'
 import * as Yup from 'yup';
 import { loginUserAction } from "../../redux/slices/users/userSlices";
 import DisabledButton from "../../components/disableButton";
@@ -12,6 +13,9 @@ const formSchema = Yup.object({
 })
 
 const Login = () => {
+    //history
+    const navigate=useNavigate();
+    
 
     // dispatch
     const dispatch = useDispatch()
@@ -22,8 +26,7 @@ const Login = () => {
     const user = useSelector((state) => {
         return state?.users
     })
-    console.log(user)
-    const { userAppErr, userServerErr, userLoading}=user;
+    const { userAppErr, userServerErr, userLoading, userAuth}=user;
     //form formik
     const formik = useFormik({
         initialValues: {
@@ -36,6 +39,14 @@ const Login = () => {
 
         validationSchema: formSchema,
     });
+
+    // redirection
+useEffect(()=> {
+if (userAuth){
+    return navigate('/profile')
+}
+}, [userAuth])
+
     return (
         <section
             style={{ height: "100vh" }}

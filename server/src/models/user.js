@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2")
 const bcrypt = require("bcryptjs");
 //schema
 const userSchema = mongoose.Schema(
@@ -42,8 +43,8 @@ userSchema.virtual("expenses", {
   localField: "_id",
 });
 
-userSchema.virtual("income", {
-  ref: "Income",
+userSchema.virtual("sales", {
+  ref: "Sale",
   foreignField: "user",
   localField: "_id",
 });
@@ -62,7 +63,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.isPasswordMatch = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
-
+userSchema.plugin(mongoosePaginate)
 //compile schema into model
 const User = mongoose.model("User", userSchema);
 module.exports = User;

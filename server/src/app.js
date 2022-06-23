@@ -8,6 +8,7 @@ const cors= require ('cors');
 const userRoutes = require('./routes/users/users');
 const salesRoutes=require ('./routes/sales/Sales');
 const ExpensesRoutes = require('./routes/expenses/Expenses');
+const accountStatsRoute = require('./routes/accountStats/accountStats');
 const app=express()
 
 
@@ -36,7 +37,10 @@ app.use("/api/users", userRoutes);
 app.use("/api/sales", salesRoutes);
 
 // Expenses routes
-app.use("/api/sales", ExpensesRoutes);
+app.use("/api/expenses", ExpensesRoutes);
+
+//accounts stats 
+app.use('/api/accounts-statistics', accountStatsRoute)
 
 //errors
 

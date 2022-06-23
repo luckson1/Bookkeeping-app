@@ -1,44 +1,47 @@
-const mongoose = require('mongoose')
-const mongoosePaginate = require('mongoose-paginate')
-
-const expensesSchema = new mongoose.Schema({
+const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate");
+//schema
+const expenseSchema = mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: true
+      required: [true, "Title  is required"],
+      type: String,
     },
     description: {
-        type: String,
-        required: true
-    },
-
-    amount: {
-        type: Number,
-        required: true
+      required: [true, "Description is required"],
+      type: String,
     },
     type: {
-        type: String,
-        default: "expense"
+      type: String,
+      default: "expense",
+    },
+    amount: {
+      required: [true, "Amount is required"],
+      type: Number,
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+      type: mongoose.Schema.Types.ObjectId, //MUST BE MONGODB ID
+      ref: "User",
+      required: [true, "user is required"],
     },
-
-}, {
+    createdAt: {
+      type: Date,
+      default: new Date(),
+    },
+  },
+  {
     timestamp: true,
     toJSON: {
-        virtual: true
+      virtuals: true,
     },
-    toObject: true,
-});
+    toObject: {
+      virtuals: true,
+    },
+  }
+);
 
+//pagination
+expenseSchema.plugin(mongoosePaginate);
+const Expenses = mongoose.model("Expense", expenseSchema);
 
-// pagination
-
-expensesSchema.plugin(mongoosePaginate);
-
-
-//compile schema into models
-const Expenses = mongoose.model('Expenses', expensesSchema)
-module.exports = Expenses
+module.exports = Expenses;
