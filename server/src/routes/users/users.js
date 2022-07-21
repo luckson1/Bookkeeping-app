@@ -8,8 +8,8 @@ const userRoutes=express.Router();
 userRoutes.post('/register', registerUser);
 userRoutes.get('/', auth, fetchAllCtrl);
 userRoutes.post("/login", loginUserCtrl);
-userRoutes.get("/profile",auth, userProfileCtrl);
-userRoutes.put("/update",auth, updateProfileCtrl);
+userRoutes.get("/profile",  auth, userProfileCtrl);
+userRoutes.put("/update", auth, updateProfileCtrl);
 
 
 

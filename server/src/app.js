@@ -6,7 +6,7 @@ const cors= require ('cors');
 
 
 const userRoutes = require('./routes/users/users');
-const salesRoutes=require ('./routes/sales/Sales');
+const incomeRoutes=require ('./routes/income/Income');
 const ExpensesRoutes = require('./routes/expenses/Expenses');
 const accountStatsRoute = require('./routes/accountStats/accountStats');
 const app=express()
@@ -33,8 +33,8 @@ app.get("/", (req, res) => {
 //Users routes
 app.use("/api/users", userRoutes);
 
-// Sales routes
-app.use("/api/sales", salesRoutes);
+// income routes
+app.use("/api/income", incomeRoutes);
 
 // Expenses routes
 app.use("/api/expenses", ExpensesRoutes);

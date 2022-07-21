@@ -1,6 +1,6 @@
 const expressAsyncHandler= require("express-async-handler");
 const jwt= require('jsonwebtoken');
-const User = require("../models/user");
+const User = require("../models/Users");
 
 const auth=expressAsyncHandler(async (req, res, next) => {
     let token;
@@ -10,15 +10,17 @@ const auth=expressAsyncHandler(async (req, res, next) => {
       
       try {
         if (token) {
+          
           const decodedUser = jwt.verify(token, process.env.JWT_KEY);
-         
+       const userId=decodedUser?.id;
+      
           //find the user
-          const user = await User.findById(decodedUser?.id);
-         
+          const user = await User.findOne({userId});
+        
           //attach the user the req obj
           req.user = user;
           
-          
+         
           next();
         }
       } catch (error) {
@@ -29,4 +31,4 @@ const auth=expressAsyncHandler(async (req, res, next) => {
     }
 });
 
-module.exports =auth
+module.exports = auth

@@ -4,12 +4,15 @@ const Expenses = require("../../models/Expenses");
 
 //fetch all expenses
 const fetchExpensesCtrl = expressAsyncHandler(async (req, res) => {
+  const id=req?.user?._id
   const { page } = req?.query;
   try {
-    const expenses = await Expenses.paginate({},
+    const expenses = await Expenses.paginate({user:id},
       
-      { limit: 10, page: Number(page), populate: "user" }
+      { limit: 10, page: Number(page)}
     );
+
+    
     res.json(expenses);
   } catch (error) {
     res.json(error);

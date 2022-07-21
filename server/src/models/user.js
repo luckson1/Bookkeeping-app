@@ -43,8 +43,8 @@ userSchema.virtual("expenses", {
   localField: "_id",
 });
 
-userSchema.virtual("sales", {
-  ref: "Sale",
+userSchema.virtual("income", {
+  ref: "Income",
   foreignField: "user",
   localField: "_id",
 });

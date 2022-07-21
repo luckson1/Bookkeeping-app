@@ -1,6 +1,6 @@
 const expressAsyncHandler = require('express-async-handler')
 const Expenses= require("../../models/Expenses")
-const Sales= require("../../models/Sales")
+const Income= require("../../models/Income")
 
 
 const accountStatsCtrl= expressAsyncHandler(async (req, res) => {
@@ -13,7 +13,7 @@ try {
         {$match: {amount: {$gte:0}}},
         {
             $group: {
-                _id: null,
+                _id: "$user",
                 averageExpense: {$avg: "$amount"},
                 totalExpenses: {$sum: "$amount"},
                 minExpense: {$min: "$amount"},
@@ -23,22 +23,22 @@ try {
         }
     ])
 
-    // sales stats
-    const salesStats= await Sales.aggregate([
+    // Income stats
+    const incomeStats= await Income.aggregate([
         //filter
         {$match: {amount: {$gte:0}}},
         {
             $group: {
-                _id: null,
-                averageSale: {$avg: "$amount"},
-                totalSales: {$sum: "$amount"},
-                minSale: {$min: "$amount"},
-                maxSale: {$max: "$amount"},
-                totalRecordsSales: {$sum: 1}
+                _id: "$user",
+                averageIncome: {$avg: "$amount"},
+                totalIncome: {$sum: "$amount"},
+                minIncome: {$min: "$amount"},
+                maxIncome: {$max: "$amount"},
+                totalRecordsIncome: {$sum: 1}
             }
         }
     ])
-    res.json({salesStats, expenseStats})
+    res.json({incomeStats, expenseStats})
 } catch (error) {
    res.json({error}) 
 }
